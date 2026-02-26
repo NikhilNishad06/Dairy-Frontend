@@ -1,0 +1,211 @@
+/* ================= DASHBOARD CONTAINER ================= */
+.dashboard-container {
+  min-height: 100vh;
+
+  font-family: 'Segoe UI', 'Inter', sans-serif;
+  padding: 30px;
+}
+
+
+.dashboard-heading {
+  background: linear-gradient(135deg, #8B1A1A, #5D4037);
+  padding: 35px 30px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  color: #FFF8E1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(139, 26, 26, 0.2);
+}
+
+/* ================= STATS SECTION ================= */
+.stats-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  /* color: #3a2612; */
+  margin-bottom: 40px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ================= STATS GRID ================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+/* ================= STAT CARD ================= */
+.stat-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e0d6c9;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  min-height: 140px;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(139, 69, 19, 0.15);
+}
+
+/* ================= STAT ICON ================= */
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #8b4513, #a0522d);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* ================= STAT CONTENT ================= */
+.stat-content {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #5d4037;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.stat-number {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #8b4513;
+  margin: 5px 0;
+  line-height: 1;
+}
+
+.stat-desc {
+  font-size: 0.95rem;
+  color: #795548;
+  opacity: 0.8;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* ================= INDIVIDUAL CARD COLORS ================= */
+.stat-card:nth-child(1) .stat-icon {
+  background: linear-gradient(135deg, #8b4513, #a0522d);
+}
+
+.stat-card:nth-child(2) .stat-icon {
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+}
+
+.stat-card:nth-child(3) .stat-icon {
+  background: linear-gradient(135deg, #f57c00, #ff9800);
+}
+
+.stat-card:nth-child(4) .stat-icon {
+  background: linear-gradient(135deg, #1565c0, #2196f3);
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .stat-number {
+    font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+}
+
+/* ================= CHARTS SECTION ================= */
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.chart-container {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.08);
+  border: 1px solid #e0d6c9;
+}
+
+.chart-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #5d4037;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= LOADING ================= */
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}

@@ -1,0 +1,132 @@
+/* Dashboard.css - Premium User UI */
+
+.user-dashboard {
+    padding: 80px 0;
+    min-height: 80vh;
+    background-color: #FDF9F0;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.welcome-section h1 {
+    font-size: 2.5rem;
+    color: #8B1A1A;
+    margin-bottom: 5px;
+}
+
+.welcome-section p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.logout-link {
+    background: white;
+    color: #8B1A1A;
+    border: 1px solid #8B1A1A;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.logout-link:hover {
+    background: #8B1A1A;
+    color: white;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.stat-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(139, 26, 26, 0.1);
+    color: #8B1A1A;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.stat-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.stat-info p {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.dashboard-btn {
+    padding: 8px 16px;
+    background: #D4AF37;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.dashboard-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.info-box {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 5px solid #8B1A1A;
+}
+
+.info-box h4 {
+    color: #8B1A1A;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .dashboard-info {
+        grid-template-columns: 1fr;
+    }
+}

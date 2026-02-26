@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Georgia&display=swap');
+
+:root {
+    --panchmev-red: #8B1A1A;
+    --panchmev-gold: #D4AF37;
+    --panchmev-cream: #FDF9F0;
+    --panchmev-brown: #3D291F;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--panchmev-cream);
+    color: var(--panchmev-brown);
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+.georgia {
+    font-family: 'Georgia', serif;
+}
+
+.panchmev-red-text {
+    color: var(--panchmev-red);
+}
+
+.panchmev-gold-text {
+    color: var(--panchmev-gold);
+}
+
+/* Global Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--panchmev-cream);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--panchmev-gold);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--panchmev-red);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: var(--panchmev-red);
+    font-weight: 700;
+}

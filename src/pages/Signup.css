@@ -1,0 +1,130 @@
+/* Signup.css - Premium Auth UI */
+
+.signup-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(253, 249, 240, 0.9), rgba(253, 249, 240, 0.9)),
+        url('https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?q=80&w=1370&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+}
+
+.signup-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.signup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.back-home {
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.panchmev {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #8B1A1A;
+    letter-spacing: 2px;
+}
+
+.signup-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 5px;
+    font-family: 'Georgia', serif;
+}
+
+.signup-header p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.signup-form .form-group {
+    margin-bottom: 20px;
+}
+
+.signup-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #DDD;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.signup-form input:focus {
+    border-color: #8B1A1A;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.1);
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 14px;
+    background: #8B1A1A;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.signup-btn:hover {
+    background: #6B1111;
+    transform: translateY(-2px);
+}
+
+.signup-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #EEE;
+}
+
+.signup-footer p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.signup-footer a {
+    color: #8B1A1A;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.error-alert {
+    background: #FFEBEE;
+    color: #D32F2F;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}

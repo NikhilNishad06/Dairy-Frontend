@@ -1,0 +1,355 @@
+/* Footer.css - Complete Redesign */
+
+/* ===== Footer Section ===== */
+.footer-section {
+  background: linear-gradient(rgba(91, 64, 55, 0.9), rgba(91, 64, 55, 0.95)),
+              url("https://images.unsplash.com/photo-1581093448798-5a3a1f5c9f2b?w=1200&auto=format&fit=crop&q=60");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #FFF8E1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add texture overlay */
+.footer-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4af37' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.footer-overlay {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Brand Section ===== */
+.footer-brand {
+  margin-bottom: 1.5rem;
+}
+
+.panchmev-red {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #FFF8E1;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.food-product {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #D4AF37;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.footer-tagline {
+  font-size: 0.85rem;
+  color: rgba(255, 248, 225, 0.8);
+  letter-spacing: 0.5px;
+  font-style: italic;
+}
+
+.footer-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 248, 225, 0.9);
+  margin-bottom: 1.5rem;
+}
+
+.footer-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(212, 175, 55, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #D4AF37;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.feature svg {
+  font-size: 0.9rem;
+}
+
+/* ===== Social Icons ===== */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #FFF8E1;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.social-icon:hover {
+  background: #D4AF37;
+  color: #5D4037;
+  transform: translateY(-3px) rotate(5deg);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== Titles ===== */
+.footer-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #D4AF37;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: #D4AF37;
+  border-radius: 2px;
+}
+
+/* ===== Links ===== */
+.footer-links,
+.footer-products {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li,
+.footer-products li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-links li a,
+.footer-products li {
+  color: rgba(255, 248, 225, 0.9);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: block;
+  padding: 0.2rem 0;
+}
+
+.footer-links li a:hover,
+.footer-products li:hover {
+  color: #D4AF37;
+  transform: translateX(5px);
+}
+
+/* ===== Contact ===== */
+.footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.contact-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  transform: translateX(5px);
+}
+
+.contact-icon {
+  color: #D4AF37;
+  font-size: 1.2rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.contact-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.contact-item strong {
+  font-size: 0.85rem;
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+.contact-item span {
+  font-size: 0.95rem;
+  color: rgba(255, 248, 225, 0.9);
+  line-height: 1.4;
+}
+
+/* ===== Divider ===== */
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(212, 175, 55, 0.3), 
+    transparent);
+  margin: 2rem 0;
+  border: none;
+}
+
+/* ===== Bottom Section ===== */
+.footer-bottom {
+  padding-top: 1rem;
+}
+
+.copyright {
+  color: rgba(255, 248, 225, 0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.footer-bottom-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
+.footer-bottom-links a {
+  color: rgba(255, 248, 225, 0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.footer-bottom-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #D4AF37;
+  transition: width 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+  color: #D4AF37;
+}
+
+.footer-bottom-links a:hover::after {
+  width: 100%;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 991.98px) {
+  .footer-section {
+    background-attachment: scroll;
+  }
+  
+  .panchmev-red {
+    font-size: 1.8rem;
+  }
+  
+  .food-product {
+    font-size: 0.9rem;
+  }
+  
+  .footer-features {
+    justify-content: center;
+  }
+  
+  .footer-bottom-links {
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .copyright {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .footer-section {
+    text-align: center;
+  }
+  
+  .footer-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .social-icons {
+    justify-content: center;
+  }
+  
+  .contact-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .contact-icon {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-links li a:hover,
+  .footer-products li:hover {
+    transform: translateY(-2px);
+  }
+  
+  .contact-item:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-section > * {
+  animation: fadeInUp 0.6s ease-out;
+}
