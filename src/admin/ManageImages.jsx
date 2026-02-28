@@ -24,7 +24,7 @@ const ManageImages = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get("https://dairy-backend-g9m2.onrender.com/api/products");
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -60,14 +60,14 @@ const ManageImages = () => {
     try {
       if (editingId) {
         await axios.put(
-          `http://localhost:5000/api/products/${editingId}`,
+          `https://dairy-backend-g9m2.onrender.com/api/products/${editingId}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } },
         );
         alert("Product updated successfully");
       } else {
         if (!image) return alert("Image is required");
-        await axios.post("http://localhost:5000/api/products", formData, {
+        await axios.post("https://dairy-backend-g9m2.onrender.com/api/products", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Product added successfully");
@@ -98,7 +98,7 @@ const ManageImages = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`https://dairy-backend-g9m2.onrender.com/api/products/${id}`);
       alert("Product deleted successfully");
       fetchProducts();
     } catch (err) {

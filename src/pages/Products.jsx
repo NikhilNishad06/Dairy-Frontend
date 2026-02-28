@@ -17,7 +17,7 @@ const Products = () => {
 
   const fetchAllProducts = async () => {
     try {
-      const apiRes = await axios.get("http://localhost:5000/api/products");
+      const apiRes = await axios.get("https://dairy-backend-g9m2.onrender.com/api/products");
       const apiProducts = apiRes.data || [];
 
       const { data: supaData, error } = await supabase.from("products").select("*");
