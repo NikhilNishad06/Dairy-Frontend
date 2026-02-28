@@ -13,7 +13,7 @@ const ManageContacts = () => {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/contact");
+      const res = await fetch("https://dairy-backend-g9m2.onrender.com/api/contact");
       if (!res.ok) throw new Error("Failed to fetch contacts");
 
       const result = await res.json();
@@ -48,7 +48,7 @@ const ManageContacts = () => {
     if (!window.confirm("Are you sure you want to delete this contact?"))
       return;
     try {
-      const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+      const res = await fetch(`https://dairy-backend-g9m2.onrender.com/api/contact/${id}`, {
         method: "DELETE",
       });
       const result = await res.json();
@@ -80,7 +80,7 @@ const ManageContacts = () => {
 
   const handleEditSave = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+      const res = await fetch(`https://dairy-backend-g9m2.onrender.com/api/contact/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
