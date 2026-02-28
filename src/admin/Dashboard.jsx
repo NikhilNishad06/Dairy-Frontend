@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { supabase } from "../supabaseClient";
-import "./Dashboard.css";
+import "./DashBoard.css";
 
 const StatsDashboard = () => {
   const [stats, setStats] = useState({
