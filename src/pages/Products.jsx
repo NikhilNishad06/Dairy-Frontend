@@ -3,6 +3,7 @@ import { FaStar, FaShoppingCart, FaSearch, FaTimes, FaLeaf, FaHeart, FaSeedling,
 import { FaCow } from "react-icons/fa6"; // FaCow is in fa6 package
 import { supabase } from "../supabaseClient";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Products.css";
 import PageTransition from "../components/PageTransition";
 
@@ -10,6 +11,8 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAllProducts();
@@ -122,8 +125,14 @@ const Products = () => {
     );
   }, [products, search]);
 
-  const openModal = (product) => setSelectedProduct(product);
-  const closeModal = () => setSelectedProduct(null);
+  const openModal = (product) => {
+    setSelectedProduct(product);
+    setQuantity(1);
+  };
+  const closeModal = () => {
+    setSelectedProduct(null);
+    setQuantity(1);
+  };
 
   return (
     <PageTransition>
@@ -314,7 +323,7 @@ const Products = () => {
                     </div>
                     <div className="quantity-selector">
                       <label>Quantity:</label>
-                      <select defaultValue="1">
+                      <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
                         <option value="1">1 unit</option>
                         <option value="2">2 units</option>
                         <option value="3">3 units</option>
@@ -324,7 +333,10 @@ const Products = () => {
                     </div>
                   </div>
                   <div className="modal-actions">
-                    <button className="buy-now-btn">
+                    <button
+                      className="buy-now-btn"
+                      onClick={() => navigate('/checkout', { state: { product: selectedProduct, quantity: parseInt(quantity) } })}
+                    >
                       <FaShoppingCart /> Buy Now
                     </button>
                     <button className="add-to-cart-btn">

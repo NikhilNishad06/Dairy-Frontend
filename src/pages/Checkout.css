@@ -1,0 +1,135 @@
+.checkout-page {
+    background-color: #FDF9F0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+    padding: 80px 20px 60px;
+    min-height: 100vh;
+}
+
+.checkout-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.checkout-page h2 {
+    font-size: 2.5rem;
+    color: #8B1A1A;
+    margin-bottom: 30px;
+    text-align: center;
+    font-family: 'Georgia', serif;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.checkout-section {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-section h3 {
+    font-size: 1.5rem;
+    color: #8B1A1A;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #FDF9F0;
+    padding-bottom: 10px;
+}
+
+.summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.summary-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summary-info h4 {
+    font-size: 1.25rem;
+    margin: 0 0 5px 0;
+}
+
+.summary-info p {
+    margin: 0;
+    color: #666;
+}
+
+.summary-total {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #8B1A1A;
+}
+
+.address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group input {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #8B1A1A;
+    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.1);
+    outline: none;
+}
+
+.payment-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.fill-address-warning {
+    color: #8B1A1A;
+    font-weight: 600;
+    padding: 15px;
+    background-color: #FDF9F0;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+}

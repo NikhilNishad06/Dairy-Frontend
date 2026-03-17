@@ -40,15 +40,23 @@ const StatsDashboard = () => {
         if (userError) throw userError;
 
         // 4. Fetch Orders (Real Revenue and Pending Orders)
-        const { data: orders, error: orderError } = await supabase
+        let orders = [];
+        const { data: ordersData, error: orderError } = await supabase
           .from("orders")
           .select("total_price, status");
+
+        if (orderError) {
+          console.warn("Orders table query error (this is normal if table doesn't exist):", orderError.message);
+          orders = [];
+        } else {
+          orders = ordersData || [];
+        }
 
         let pendingCount = 0;
         let revenueSum = 0;
         let formattedOrderStatus = [];
 
-        if (!orderError && orders) {
+        if (orders && orders.length > 0) {
           pendingCount = orders.filter(o => o.status?.toLowerCase() === 'pending').length;
           revenueSum = orders.reduce((acc, o) => acc + (Number(o.total_price) || 0), 0);
 
@@ -161,7 +169,7 @@ const StatsDashboard = () => {
         <div className="chart-container">
           <h3 className="chart-title">Order Status Distribution</h3>
           <div style={{ width: '100%', height: 300 }}>
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={orderStatusData}
@@ -186,7 +194,7 @@ const StatsDashboard = () => {
         <div className="chart-container">
           <h3 className="chart-title">Products by Category</h3>
           <div style={{ width: '100%', height: 300 }}>
-            <ResponsiveContainer>
+            <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={categoryData}
