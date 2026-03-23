@@ -35,6 +35,7 @@ const Login = () => {
     setError("");
 
     try {
+      // 1. Authenticate with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -42,8 +43,8 @@ const Login = () => {
 
       if (authError) throw authError;
 
-      // Fetch role from users table
-      const { data: profile, error: profileError } = await supabase
+      // 2. FETCH role from our single 'users' table
+      const { data: userProfile, error: profileError } = await supabase
         .from('users')
         .select('role')
         .eq('id', authData.user.id)
@@ -51,17 +52,17 @@ const Login = () => {
 
       if (profileError) throw profileError;
       
-      if (!profile) {
-        // Fallback for new users without a record in the public.users table
-        navigate("/dashboard");
+      if (!userProfile) {
+        // Log out immediately if they don't have a record in our users table
+        await supabase.auth.signOut();
+        setError("Account record not found. Please register properly.");
+        setIsLoading(false);
         return;
       }
  
-      if (profile.role === 'admin') {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+      // 3. Navigate successfully based on role
+      navigate(userProfile.role === 'admin' ? "/admin-dashboard" : "/dashboard");
+
     } catch (err) {
       setError(err.message);
     } finally {

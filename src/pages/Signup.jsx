@@ -26,43 +26,40 @@ const Signup = () => {
         }
 
         try {
-            // STEP 1: Direct Supabase Signup (Account Creation)
-            // Simplified call to avoid server-side metadata rejection
+            // STEP 1: Supabase Auth (Account Creation)
             const { data: authData, error: signupError } = await supabase.auth.signUp({
-                email,
-                password
+                email: email.trim(),
+                password: password
             });
 
             if (signupError) {
-                console.error("Supabase Auth Error:", signupError);
+                console.error("Auth Error:", signupError);
                 setError(`Auth Error: ${signupError.message}`);
                 setLoading(false);
                 return;
             }
 
             if (authData?.user) {
-                // STEP 2: Create profile in public.users table
-                // Since RLS is disabled (as seen in screenshot), this should succeed.
-                const { error: dbError } = await supabase
-                    .from('users')
-                    .upsert([{ 
-                        id: authData.user.id, 
-                        email: email,
-                        full_name: fullName,
-                        role: 'customer'
-                    }], { onConflict: 'id' });
+                // STEP 2: Save ALL user data to our consolidated 'users' table
+                const { error: dbError } = await supabase.from('users').insert([{ 
+                    id: authData.user.id, 
+                    full_name: fullName.trim(),
+                    email: email.trim(),
+                    password: password, // As requested, storing this directly
+                    role: 'user' 
+                }]);
 
                 if (dbError) {
-                    console.error("Database Error:", dbError);
-                    setError(`Accross partially created: ${dbError.message}`);
+                    console.error("Database Save Error:", dbError);
+                    setError(`Database Error: ${dbError.message}`);
                     setLoading(false);
                     return;
                 }
 
                 // Success!
-                navigate("/login", { state: { message: "Success! Account created. Please verify your email." } });
+                navigate("/login", { state: { message: "Account created successfully! Please Login." } });
             } else {
-                setError("Signup initiated, but user session not found. Please check your email.");
+                setError("Signup request sent, check your email.");
                 setLoading(false);
             }
 
