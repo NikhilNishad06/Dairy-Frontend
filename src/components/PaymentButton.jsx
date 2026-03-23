@@ -35,7 +35,8 @@ const PaymentButton = ({ amount, userId, address, planName, onSuccess, onError, 
             }
 
             // 1. Creating order on backend
-            const result = await axios.post("/api/payments/create-order", {
+            const API_URL = import.meta.env.VITE_API_URL || "";
+            const result = await axios.post(`${API_URL}/api/payments/create-order`, {
                 amount,
                 userId,
                 address,
@@ -62,7 +63,8 @@ const PaymentButton = ({ amount, userId, address, planName, onSuccess, onError, 
                 handler: async function (response) {
                     try {
                         // 3. Verify Payment Signature
-                        const verifyResult = await axios.post("/api/payments/verify-payment", {
+                        const API_URL = import.meta.env.VITE_API_URL || "";
+                        const verifyResult = await axios.post(`${API_URL}/api/payments/verify-payment`, {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,

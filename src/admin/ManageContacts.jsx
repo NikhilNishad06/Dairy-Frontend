@@ -13,7 +13,8 @@ const ManageContacts = () => {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-      const res = await fetch("/api/contact");
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${API_URL}/api/contact`);
       if (!res.ok) throw new Error("Failed to fetch contacts");
 
       const result = await res.json();
@@ -48,7 +49,8 @@ const ManageContacts = () => {
     if (!window.confirm("Are you sure you want to delete this contact?"))
       return;
     try {
-      const res = await fetch(`/api/contact/${id}`, {
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${API_URL}/api/contact/${id}`, {
         method: "DELETE",
       });
       const result = await res.json();
@@ -80,7 +82,8 @@ const ManageContacts = () => {
 
   const handleEditSave = async (id) => {
     try {
-      const res = await fetch(`/api/contact/${id}`, {
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${API_URL}/api/contact/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

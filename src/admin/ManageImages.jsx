@@ -24,7 +24,8 @@ const ManageImages = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/products");
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      const res = await axios.get(`${API_URL}/api/products`);
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -58,16 +59,17 @@ const ManageImages = () => {
     if (image) formData.append("image", image);
 
     try {
+      const API_URL = import.meta.env.VITE_API_URL || "";
       if (editingId) {
         await axios.put(
-          `/api/products/${editingId}`,
+          `${API_URL}/api/products/${editingId}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } },
         );
         alert("Product updated successfully");
       } else {
         if (!image) return alert("Image is required");
-        await axios.post("/api/products", formData, {
+        await axios.post(`${API_URL}/api/products`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Product added successfully");
@@ -98,7 +100,8 @@ const ManageImages = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      await axios.delete(`/api/products/${id}`);
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      await axios.delete(`${API_URL}/api/products/${id}`);
       alert("Product deleted successfully");
       fetchProducts();
     } catch (err) {

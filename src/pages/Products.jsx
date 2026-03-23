@@ -41,7 +41,8 @@ const Products = () => {
       // 1. Fetch from External API (with timeout/retry logic internally handled by axios defaults or just simple catch)
       let apiProducts = [];
       try {
-        const apiRes = await axios.get("/api/products");
+        const API_URL = import.meta.env.VITE_API_URL || "";
+        const apiRes = await axios.get(`${API_URL}/api/products`);
         apiProducts = apiRes.data || [];
       } catch (apiError) {
         console.warn("External API fetch failed, falling back to Supabase/Cache:", apiError.message);

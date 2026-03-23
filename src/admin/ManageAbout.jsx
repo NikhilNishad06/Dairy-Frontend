@@ -20,7 +20,8 @@ const ManageAbout = () => {
   const fetchTeam = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/about");
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      const res = await axios.get(`${API_URL}/api/about`);
       
       // Handle different response structures gracefully
       const teamData = res.data.data || (Array.isArray(res.data) ? res.data : []);
@@ -57,16 +58,17 @@ const ManageAbout = () => {
     if (image) formData.append("image", image);
 
     try {
+      const API_URL = import.meta.env.VITE_API_URL || "";
       if (editingId) {
         await axios.put(
-          `/api/about/${editingId}`,
+          `${API_URL}/api/about/${editingId}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } },
         );
         alert("Team member updated successfully");
       } else {
         if (!image) return alert("Image is required");
-        await axios.post("/api/about", formData, {
+        await axios.post(`${API_URL}/api/about`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Team member added successfully");
@@ -96,7 +98,8 @@ const ManageAbout = () => {
     if (!window.confirm("Are you sure you want to delete this team member?")) return;
 
     try {
-      await axios.delete(`/api/about/${id}`);
+      const API_URL = import.meta.env.VITE_API_URL || "";
+      await axios.delete(`${API_URL}/api/about/${id}`);
       alert("Team member deleted successfully");
       fetchTeam();
     } catch (err) {

@@ -24,7 +24,8 @@ const About = () => {
     const fetchTeam = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("/api/about");
+        const API_URL = import.meta.env.VITE_API_URL || "";
+        const res = await axios.get(`${API_URL}/api/about`);
         
         if (res.data && res.data.success && res.data.data.length > 0) {
           setTeam(res.data.data);
