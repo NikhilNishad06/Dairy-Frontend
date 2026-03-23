@@ -43,7 +43,7 @@ const StatsDashboard = () => {
         let orders = [];
         const { data: ordersData, error: orderError } = await supabase
           .from("orders")
-          .select("total_price, status");
+          .select("total_amount, status");
 
         if (orderError) {
           console.warn("Orders table query error (this is normal if table doesn't exist):", orderError.message);
@@ -58,7 +58,7 @@ const StatsDashboard = () => {
 
         if (orders && orders.length > 0) {
           pendingCount = orders.filter(o => o.status?.toLowerCase() === 'pending').length;
-          revenueSum = orders.reduce((acc, o) => acc + (Number(o.total_price) || 0), 0);
+          revenueSum = orders.reduce((acc, o) => acc + (Number(o.total_amount) || 0), 0);
 
           const statuses = {};
           orders.forEach(o => {

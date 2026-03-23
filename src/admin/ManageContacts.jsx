@@ -13,7 +13,7 @@ const ManageContacts = () => {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-      const res = await fetch("https://dairy-backend-g9m2.onrender.com/api/contact");
+      const res = await fetch("/api/contact");
       if (!res.ok) throw new Error("Failed to fetch contacts");
 
       const result = await res.json();
@@ -48,7 +48,7 @@ const ManageContacts = () => {
     if (!window.confirm("Are you sure you want to delete this contact?"))
       return;
     try {
-      const res = await fetch(`https://dairy-backend-g9m2.onrender.com/api/contact/${id}`, {
+      const res = await fetch(`/api/contact/${id}`, {
         method: "DELETE",
       });
       const result = await res.json();
@@ -80,7 +80,7 @@ const ManageContacts = () => {
 
   const handleEditSave = async (id) => {
     try {
-      const res = await fetch(`https://dairy-backend-g9m2.onrender.com/api/contact/${id}`, {
+      const res = await fetch(`/api/contact/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -140,7 +140,12 @@ const ManageContacts = () => {
             <FaCalendar />
           </div>
           <div className="stat-info">
-            <h3>{new Date().getDate()}</h3>
+            <h3>
+              {contacts.filter(c => {
+                const today = new Date().toISOString().split('T')[0];
+                return c.created_at?.split('T')[0] === today;
+              }).length}
+            </h3>
             <p>Today</p>
           </div>
         </div>
@@ -243,7 +248,7 @@ const ManageContacts = () => {
                         onChange={handleEditChange}
                       />
                     ) : (
-                      <span className={`product-tag ${c.product_interest ? '' : 'no-product'}`}>
+                      <span className={`admin-product-interest-pill ${c.product_interest ? '' : 'no-product'}`}>
                         {c.product_interest || "Not specified"}
                       </span>
                     )}

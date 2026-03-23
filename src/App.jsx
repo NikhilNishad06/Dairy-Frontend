@@ -27,6 +27,7 @@ import Login from "./admin/Login";
 import AdminDashboard from "./admin/Dashboard";
 import ManageImages from "./admin/ManageImages";
 import ManageContacts from "./admin/ManageContacts";
+import ManageAbout from "./admin/ManageAbout";
 import AdminLayout from "./admin/AdminLayout";
 
 /* ================= NEW AUTH PAGES ================= */
@@ -81,6 +82,7 @@ function App() {
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/admin/manage-images" element={<ManageImages />} />
             <Route path="/admin/manage-contacts" element={<ManageContacts />} />
+            <Route path="/admin/manage-about" element={<ManageAbout />} />
           </Route>
         </Route>
 

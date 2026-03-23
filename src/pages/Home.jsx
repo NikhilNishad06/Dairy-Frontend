@@ -185,56 +185,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* ===== Featured Products ===== */}
-        <section className="products-section">
-          <div className="container">
-            <div className="section-header"
-            >
-              <h2>Our Premium Products</h2>
-              <p>Crafted with traditional Indian expertise</p>
-              <div className="section-ornament"></div>
-            </div>
 
-            <div className="products-grid">
-              {products.map((product, i) => (
-                <div key={i} className="product-card"
-                  data-aos-delay={i * 150}>
-                  {product.badge && (
-                    <div className="product-badge">{product.badge}</div>
-                  )}
-                  <div className="product-image-container">
-                    <img
-                      src={product.img}
-                      alt={product.name}
-                      className="product-image"
-                    />
-                    <div className="product-tag">{product.tag}</div>
-                  </div>
-                  <div className="product-content">
-                    <h3>{product.name}</h3>
-                    <p>{product.desc}</p>
-                    <div className="product-price">
-                      <span className="current-price">{product.price}/{product.unit}</span>
-                      {product.originalPrice && (
-                        <span className="original-price">{product.originalPrice}</span>
-                      )}
-                    </div>
-                    <button onClick={() => openModal(product)} className="product-btn">
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="products-cta"
-            >
-              <Link to="/products" className="btn btn-outline">
-                View All Products →
-              </Link>
-            </div>
-          </div>
-        </section>
 
         {/* ===== CTA Section ===== */}
         <section className="cta-section">

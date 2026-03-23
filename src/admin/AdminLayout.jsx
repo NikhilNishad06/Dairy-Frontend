@@ -34,6 +34,14 @@ const AdminLayout = () => {
           {/* ... */}
 
           <NavLink
+            to="/admin/manage-about"
+            className="menu-link"
+            onClick={() => setOpen(false)}
+          >
+            <FaInfoCircle className="menu-icon" />
+            <span>Manage About</span>
+          </NavLink>
+          <NavLink
             to="/admin/manage-images"
             className="menu-link"
             onClick={() => setOpen(false)}
@@ -50,6 +58,7 @@ const AdminLayout = () => {
             <FaUsers className="menu-icon" />
             <span>Manage Contacts</span>
           </NavLink>
+
 
           {/* ... */}
 

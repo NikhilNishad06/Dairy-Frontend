@@ -217,7 +217,7 @@
   transform: translateX(3px);
 }
 
-.product-tag {
+.admin-product-interest-pill {
   background: rgba(46, 125, 50, 0.1);
   color: #2E7D32;
   padding: 6px 12px;
@@ -227,7 +227,7 @@
   display: inline-block;
 }
 
-.product-tag.no-product {
+.admin-product-interest-pill.no-product {
   background: rgba(158, 158, 158, 0.1);
   color: #757575;
 }

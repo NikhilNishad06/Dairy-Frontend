@@ -6,5 +6,14 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['framer-motion']
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   }
 })

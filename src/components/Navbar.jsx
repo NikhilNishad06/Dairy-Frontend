@@ -29,7 +29,7 @@ const Navbar = () => {
       .from('users')
       .select('role')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
     if (!error && data) setRole(data.role);
   };
 
@@ -92,7 +92,7 @@ const Navbar = () => {
               <>
                 <li className="nav-item mt-3 mt-lg-0">
                   <Link
-                    className="nav-link fancy-link d-flex align-items-center"
+                    className="nav-link fancy-link d-flex align-items-center justify-content-center"
                     to={role === 'admin' ? "/admin-dashboard" : "/dashboard"}
                   >
                     <FaColumns className="me-2" />

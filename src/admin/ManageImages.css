@@ -329,6 +329,12 @@
   gap: 25px;
 }
 
+.products-grids {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
 .product-card {
   background: white;
   border-radius: 16px;
@@ -533,10 +539,12 @@
     grid-column: span 1;
   }
   
-  .products-grid {
+  /* .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
+  } */
 }
+
+
 
 @media (max-width: 768px) {
   .manage-header {
@@ -590,3 +598,171 @@
     flex-direction: column;
   }
 }
+
+/* ================= MANAGE ABOUT ADMIN SPECIFIC ================= */
+.manage-about-admin {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.about-admin-header {
+  background: linear-gradient(135deg, #8B1A1A, #5D4037);
+  padding: 25px 30px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  color: #FFF8E1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(139, 26, 26, 0.2);
+}
+
+.about-admin-form-section {
+  margin-bottom: 40px;
+}
+
+.about-admin-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-admin-list-section {
+  margin-top: 40px;
+}
+
+.about-admin-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.about-admin-member-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-admin-member-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(139, 26, 26, 0.15);
+}
+
+.about-admin-member-image {
+  position: relative;
+  height: 250px; /* Taller for profile photos */
+  overflow: hidden;
+}
+
+.about-admin-member-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-admin-member-info {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.about-admin-member-info h4 {
+  color: #5D4037;
+  margin: 0 0 5px 0;
+  font-size: 1.3rem;
+}
+
+.about-admin-member-actions {
+  padding: 15px 20px;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+  display: flex;
+  gap: 10px;
+}
+
+/* ================= MANAGE PRODUCTS ADMIN SPECIFIC ================= */
+.manage-products-admin {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.product-admin-header {
+  background: linear-gradient(135deg, #8B1A1A, #5D4037);
+  padding: 25px 30px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  color: #FFF8E1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(139, 26, 26, 0.2);
+}
+
+.product-admin-form-section {
+  margin-bottom: 40px;
+}
+
+.product-admin-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-admin-list-section {
+  margin-top: 40px;
+}
+
+.product-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.product-admin-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.product-admin-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(139, 26, 26, 0.15);
+}
+
+.product-admin-image-box {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.product-admin-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-admin-info-box {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.product-admin-actions {
+  padding: 15px 20px;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+  display: flex;
+  gap: 10px;
+}

@@ -24,7 +24,7 @@ const ManageImages = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("https://dairy-backend-g9m2.onrender.com/api/products");
+      const res = await axios.get("/api/products");
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -60,14 +60,14 @@ const ManageImages = () => {
     try {
       if (editingId) {
         await axios.put(
-          `https://dairy-backend-g9m2.onrender.com/api/products/${editingId}`,
+          `/api/products/${editingId}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } },
         );
         alert("Product updated successfully");
       } else {
         if (!image) return alert("Image is required");
-        await axios.post("https://dairy-backend-g9m2.onrender.com/api/products", formData, {
+        await axios.post("/api/products", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Product added successfully");
@@ -98,7 +98,7 @@ const ManageImages = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      await axios.delete(`https://dairy-backend-g9m2.onrender.com/api/products/${id}`);
+      await axios.delete(`/api/products/${id}`);
       alert("Product deleted successfully");
       fetchProducts();
     } catch (err) {
@@ -128,9 +128,9 @@ const ManageImages = () => {
   };
 
   return (
-    <div className="manage-images">
+    <div className="manage-products-admin">
       {/* Header */}
-      <div className="manage-header">
+      <div className="product-admin-header">
         <div className="header-left">
           <h2><FaImage className="header-icon" /> Manage Products</h2>
           <p className="product-count">Total Products: {products.length}</p>
@@ -147,7 +147,7 @@ const ManageImages = () => {
       </div>
 
       {/* Form Section */}
-      <div className="form-section">
+      <div className="product-admin-form-section">
         <div className="form-card">
           <div className="form-header">
             <h3>{editingId ? "Update Product" : "Add New Product"}</h3>
@@ -158,7 +158,7 @@ const ManageImages = () => {
             )}
           </div>
           
-          <form onSubmit={handleSubmit} className="product-form">
+          <form onSubmit={handleSubmit} className="product-admin-form">
             <div className="form-grid">
               <div className="form-group">
                 <label><FaTag /> Product Name</label>
@@ -270,7 +270,7 @@ const ManageImages = () => {
       </div>
 
       {/* Products Table */}
-      <div className="products-section">
+      <div className="product-admin-list-section">
         <div className="section-header">
           <h3>All Products</h3>
           <p className="showing-count">Showing {filteredProducts.length} of {products.length} products</p>
@@ -289,14 +289,14 @@ const ManageImages = () => {
             <p>{search ? "Try a different search term" : "Add your first product using the form above"}</p>
           </div>
         ) : (
-          <div className="products-grid">
+          <div className="product-admin-grid">
             {filteredProducts.map((product) => (
-              <div className="product-card" key={product.id}>
-                <div className="product-image">
+              <div className="product-admin-card" key={product.id}>
+                <div className="product-admin-image-box">
                   <img src={product.image_url} alt={product.name} />
                   <span className="product-category">{product.category}</span>
                 </div>
-                <div className="product-info">
+                <div className="product-admin-info-box">
                   <h4>{product.name}</h4>
                   <div className="product-rating">
                     <div className="stars">
@@ -312,7 +312,7 @@ const ManageImages = () => {
                     <span className="product-id">ID: {product.id}</span>
                   </div>
                 </div>
-                <div className="product-actions">
+                <div className="product-admin-actions">
                   <button className="action-btn edit" onClick={() => handleEdit(product)}>
                     <FaEdit /> Edit
                   </button>

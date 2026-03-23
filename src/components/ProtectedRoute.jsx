@@ -9,6 +9,11 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
     useEffect(() => {
         const checkUser = async () => {
+            // Safety timeout to prevent stuck loading screen
+            const timeout = setTimeout(() => {
+                setLoading(false);
+            }, 5000);
+
             try {
                 const { data: { session: currentSession } } = await supabase.auth.getSession();
                 setSession(currentSession);
@@ -18,15 +23,19 @@ const ProtectedRoute = ({ allowedRoles }) => {
                         .from('users')
                         .select('role')
                         .eq('id', currentSession.user.id)
-                        .single();
+                        .maybeSingle();
 
                     if (!error && data) {
                         setUserRole(data.role);
+                    } else {
+                        // Default to customer if successfully authenticated but profile record is missing or DB error
+                        setUserRole('customer');
                     }
                 }
             } catch (error) {
                 console.error('Error checking auth:', error);
             } finally {
+                clearTimeout(timeout);
                 setLoading(false);
             }
         };
@@ -36,19 +45,31 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
     if (loading) {
         return (
-            <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh', backgroundColor: '#FDF9F0' }}>
+            <div className="loading" style={{ flexDirection: 'column', gap: '20px' }}>
                 <div className="spinner-border text-danger" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
+                <div style={{ color: '#8B1A1A' }}>Securing your session... Please wait.</div>
             </div>
         );
     }
 
     if (!session) {
+        console.log("No session found, redirecting to login");
         return <Navigate to="/login" replace />;
     }
 
     if (allowedRoles && !allowedRoles.includes(userRole)) {
+        console.log(`Role ${userRole} not in ${allowedRoles}, redirecting to login`);
+        // If we are already at home or stuck, break the loop by going to login
+        if (window.location.pathname === "/" || !userRole) {
+            return (
+                <div className="loading" style={{ flexDirection: 'column' }}>
+                    <div style={{ color: '#8B1A1A' }}>Access Denied: Redirecting...</div>
+                    <Navigate to="/login" replace />
+                </div>
+            );
+        }
         return <Navigate to="/" replace />;
     }
 

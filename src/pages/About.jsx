@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaUsers, FaHeart, FaLeaf, FaShieldAlt, FaAward, FaHandsHelping, FaHistory, FaStar, FaTruck, FaCertificate } from "react-icons/fa";
 import { GiCow, GiMilkCarton, GiFarmer } from "react-icons/gi";
 import { supabase } from "../supabaseClient";
+import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./About.css";
@@ -19,56 +20,21 @@ const About = () => {
       offset: 100
     });
 
-    const mockTeam = [
-      {
-        id: 1,
-        name: "Rajesh Kumar",
-        role: "Co-Founder & CEO",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=60",
-        experience: "25+ Years",
-        bio: "Visionary leader with a passion for traditional dairy heritage."
-      },
-      {
-        id: 2,
-        name: "Priya Singh",
-        role: "Co-Founder & Operations",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&auto=format&fit=crop&q=60",
-        experience: "20+ Years",
-        bio: "Expert in supply chain and organic dairy processing."
-      },
-      {
-        id: 3,
-        name: "Amit Patel",
-        role: "Quality Assurance",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=60",
-        experience: "15+ Years",
-        bio: "Ensures every drop of milk meets our high standards of purity."
-      }
-    ];
-
-    // 🔥 FETCH FROM SUPABASE DIRECTLY
+    // 🔥 FETCH FROM BACKEND API
     const fetchTeam = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
-          .from("team")
-          .select("*")
-          .order("id", { ascending: true });
-
-        if (error) {
-          console.warn("Table 'team' might be missing, falling back to mock data:", error.message);
-          setTeam(mockTeam);
-          setError(null); // Silent fallback
-        } else if (data && data.length > 0) {
-          setTeam(data);
+        const res = await axios.get("/api/about");
+        
+        if (res.data && res.data.success && res.data.data.length > 0) {
+          setTeam(res.data.data);
           setError(null);
         } else {
-          setTeam(mockTeam);
-          setError(null);
+          setTeam([]); // No fallback to mock data
         }
       } catch (err) {
-        console.error("Unexpected error, showing mock team:", err);
-        setTeam(mockTeam);
+        console.error("Backend fetch failed, showing empty state:", err);
+        setTeam([]);
         setError(null);
       } finally {
         setLoading(false);

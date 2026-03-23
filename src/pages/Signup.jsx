@@ -15,23 +15,61 @@ const Signup = () => {
         setLoading(true);
         setError("");
 
-        const { data, error: signupError } = await supabase.auth.signUp({
-            email: formData.email,
-            password: formData.password,
-            options: { data: { full_name: formData.fullName } }
-        });
+        const email = formData.email.trim();
+        const password = formData.password;
+        const fullName = formData.fullName.trim();
 
-        if (signupError) {
-            setError(signupError.message);
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters long.");
             setLoading(false);
-        } else if (data?.user) {
-            const { error: dbError } = await supabase.from('users').insert([{ id: data.user.id, role: 'customer' }]);
-            if (dbError) {
-                setError(dbError.message);
+            return;
+        }
+
+        try {
+            // STEP 1: Direct Supabase Signup (Account Creation)
+            // Simplified call to avoid server-side metadata rejection
+            const { data: authData, error: signupError } = await supabase.auth.signUp({
+                email,
+                password
+            });
+
+            if (signupError) {
+                console.error("Supabase Auth Error:", signupError);
+                setError(`Auth Error: ${signupError.message}`);
                 setLoading(false);
-            } else {
-                navigate("/login");
+                return;
             }
+
+            if (authData?.user) {
+                // STEP 2: Create profile in public.users table
+                // Since RLS is disabled (as seen in screenshot), this should succeed.
+                const { error: dbError } = await supabase
+                    .from('users')
+                    .upsert([{ 
+                        id: authData.user.id, 
+                        email: email,
+                        full_name: fullName,
+                        role: 'customer'
+                    }], { onConflict: 'id' });
+
+                if (dbError) {
+                    console.error("Database Error:", dbError);
+                    setError(`Accross partially created: ${dbError.message}`);
+                    setLoading(false);
+                    return;
+                }
+
+                // Success!
+                navigate("/login", { state: { message: "Success! Account created. Please verify your email." } });
+            } else {
+                setError("Signup initiated, but user session not found. Please check your email.");
+                setLoading(false);
+            }
+
+        } catch (err) {
+            console.error("Signup exception:", err);
+            setError(`Unexpected Error: ${err.message}`);
+            setLoading(false);
         }
     };
 
@@ -75,8 +113,9 @@ const Signup = () => {
                         <label><FaLock /> Password</label>
                         <input
                             type="password"
-                            placeholder="********"
+                            placeholder="Min. 6 characters"
                             required
+                            minLength="6"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         />

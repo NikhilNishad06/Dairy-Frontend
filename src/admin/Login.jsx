@@ -20,7 +20,7 @@ const Login = () => {
           .from('users')
           .select('role')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
 
         if (profile?.role === 'admin') navigate("/admin-dashboard");
         else navigate("/dashboard");
@@ -47,10 +47,16 @@ const Login = () => {
         .from('users')
         .select('role')
         .eq('id', authData.user.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
-
+      
+      if (!profile) {
+        // Fallback for new users without a record in the public.users table
+        navigate("/dashboard");
+        return;
+      }
+ 
       if (profile.role === 'admin') {
         navigate("/admin-dashboard");
       } else {

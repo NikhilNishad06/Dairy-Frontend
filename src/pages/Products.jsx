@@ -16,29 +16,71 @@ const Products = () => {
 
   useEffect(() => {
     fetchAllProducts();
+
+    // Set up Real-time subscription for Supabase products
+    // This ensures that anything the admin adds is immediately visible to customers
+    const channel = supabase
+      .channel("products_realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "products" },
+        (payload) => {
+          console.log("Real-time update received:", payload);
+          fetchAllProducts(); // Re-fetch to get merged list
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchAllProducts = async () => {
     try {
-      const apiRes = await axios.get("https://dairy-backend-g9m2.onrender.com/api/products");
-      const apiProducts = apiRes.data || [];
+      // 1. Fetch from External API (with timeout/retry logic internally handled by axios defaults or just simple catch)
+      let apiProducts = [];
+      try {
+        const apiRes = await axios.get("/api/products");
+        apiProducts = apiRes.data || [];
+      } catch (apiError) {
+        console.warn("External API fetch failed, falling back to Supabase/Cache:", apiError.message);
+      }
 
-      const { data: supaData, error } = await supabase.from("products").select("*");
-      if (error) {
-        console.error("Supabase error:", error.message);
+      // 2. Fetch from Supabase (Primary Database)
+      const { data: supaData, error: supaError } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false }); // Show newest first
+
+      if (supaError) {
+        console.error("Supabase error:", supaError.message);
       }
       const supaProducts = supaData || [];
 
-      const mergedProducts = [...apiProducts, ...supaProducts].reduce((acc, curr) => {
-        if (!acc.find((p) => p.id === curr.id)) acc.push(curr);
-        return acc;
-      }, []);
+      // 3. Robust Merge Logic: Ensure no duplicates by ID or Name
+      // This ensures that products added by admin via ANY method are displayed
+      const combined = [...apiProducts, ...supaProducts];
+      const uniqueProductsMap = new Map();
+      
+      combined.forEach(product => {
+        // Use name + category as a unique key if ID is missing or inconsistent
+        const uniqueKey = product.id || `${product.name}-${product.category}`.toLowerCase();
+        if (!uniqueProductsMap.has(uniqueKey)) {
+          uniqueProductsMap.set(uniqueKey, product);
+        }
+      });
 
-      // Add sample products if empty (for demo)
-      if (mergedProducts.length === 0) {
+      const mergedProducts = Array.from(uniqueProductsMap.values());
+
+      // 4. Set final products list
+      if (mergedProducts.length > 0) {
+        setProducts(mergedProducts);
+      } else {
+        // Only show sample products if everything else fails (ensures a good first impression)
         const sampleProducts = [
           {
-            id: 1,
+            id: 'sample-1',
             name: "Fresh Cow Milk",
             category: "Milk",
             image_url: "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=500&auto=format&fit=crop&q=60",
@@ -47,7 +89,7 @@ const Products = () => {
             price: "₹40/L"
           },
           {
-            id: 2,
+            id: 'sample-2',
             name: "Organic Paneer",
             category: "Paneer",
             image_url: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&auto=format&fit=crop&q=60",
@@ -56,7 +98,7 @@ const Products = () => {
             price: "₹280/kg"
           },
           {
-            id: 3,
+            id: 'sample-3',
             name: "Desi Ghee",
             category: "Ghee",
             image_url: "https://images.unsplash.com/photo-1605601722069-3dc4d38e1c9a?w=500&auto=format&fit=crop&q=60",
@@ -65,7 +107,7 @@ const Products = () => {
             price: "₹550/kg"
           },
           {
-            id: 4,
+            id: 'sample-4',
             name: "Curd (Dahi)",
             category: "Curd",
             image_url: "https://images.unsplash.com/photo-1625943553855-362811d08660?w=500&auto=format&fit=crop&q=60",
@@ -74,7 +116,7 @@ const Products = () => {
             price: "₹60/pack"
           },
           {
-            id: 5,
+            id: 'sample-5',
             name: "Buttermilk",
             category: "Beverages",
             image_url: "https://images.unsplash.com/photo-1546171753-97d7676e4602?w=500&auto=format&fit=crop&q=60",
@@ -83,7 +125,7 @@ const Products = () => {
             price: "₹30/glass"
           },
           {
-            id: 6,
+            id: 'sample-6',
             name: "Cottage Cheese",
             category: "Cheese",
             image_url: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&auto=format&fit=crop&q=60",
@@ -92,7 +134,7 @@ const Products = () => {
             price: "₹320/kg"
           },
           {
-            id: 7,
+            id: 'sample-7',
             name: "Flavored Milk",
             category: "Milk",
             image_url: "https://images.unsplash.com/photo-1519985178571-5cf2f56b1c8d?w=500&auto=format&fit=crop&q=60",
@@ -101,7 +143,7 @@ const Products = () => {
             price: "₹50/pack"
           },
           {
-            id: 8,
+            id: 'sample-8',
             name: "Fresh Cream",
             category: "Cream",
             image_url: "https://images.unsplash.com/photo-1603524053242-8cbb10685da1?w=500&auto=format&fit=crop&q=60",
@@ -111,11 +153,9 @@ const Products = () => {
           }
         ];
         setProducts(sampleProducts);
-      } else {
-        setProducts(mergedProducts);
       }
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error("Main fetch error:", err);
     }
   };
 
@@ -170,14 +210,28 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Search Section */}
-        <section className="search-section">
+        {/* Categories Section (Simplified height) */}
+        <section className="categories-section-compact">
           <div className="container">
-            <div className="search-wrapper">
-              <div className="search-header">
-                <h2>Discover Our Pure Products</h2>
-                <p>Search from our wide range of traditional dairy products</p>
-              </div>
+            <div className="categories-grid">
+              {['Milk', 'Paneer', 'Ghee', 'Curd', 'Buttermilk', 'Cheese', 'Cream'].map(cat => (
+                <button
+                  key={cat}
+                  className={`category-btn ${search.toLowerCase() === cat.toLowerCase() ? 'active' : ''}`}
+                  onClick={() => setSearch(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Products Grid Section */}
+        <section className="public-products-section">
+          <div className="container">
+            {/* INLINE SEARCH BAR MOVED HERE */}
+            <div className="inline-search-wrapper">
               <div className="search-box">
                 <FaSearch className="search-icon" />
                 <input
@@ -193,38 +247,15 @@ const Products = () => {
                 )}
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Categories */}
-        <section className="categories-section">
-          <div className="container">
-            <h3>Browse by Category</h3>
-            <div className="categories-grid">
-              {['Milk', 'Paneer', 'Ghee', 'Curd', 'Buttermilk', 'Cheese', 'Cream'].map(cat => (
-                <button
-                  key={cat}
-                  className={`category-btn ${search.toLowerCase() === cat.toLowerCase() ? 'active' : ''}`}
-                  onClick={() => setSearch(cat)}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Products Grid */}
-        <section className="products-grid">
-          <div className="container">
             <div className="section-header">
               <h2>Our Premium Collection</h2>
               <p>Handpicked with love, delivered with care</p>
             </div>
-            <div className="products-grid-container">
+            <div className="public-products-grid">
               {filteredProducts.map((product) => (
-                <div className="product-card" key={product.id}>
-                  <div className="product-image">
+                <div className="public-product-card" key={product.id}>
+                  <div className="public-product-image">
                     <img src={product.image_url} alt={product.name} />
                     <div className="category-badge">
                       <FaSeedling className="badge-icon" />
@@ -236,7 +267,7 @@ const Products = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="product-info">
+                  <div className="public-product-info">
                     <h4>{product.name}</h4>
                     <div className="rating">
                       {[...Array(5)].map((_, i) => (
@@ -276,53 +307,55 @@ const Products = () => {
 
         {/* Product Modal */}
         {selectedProduct && (
-          <div className="product-modal-overlay">
-            <div className="product-modal">
+          <div className="public-modal-overlay">
+            <div className="public-modal">
               <button className="close-btn" onClick={closeModal}>
                 <FaTimes />
               </button>
-              <div className="modal-content">
-                <div className="modal-image">
-                  <img src={selectedProduct.image_url} alt={selectedProduct.name} />
-                  <div className="image-badge">
-                    <FaLeaf /> 100% Natural
+              <div className="public-modal-content">
+                <div className="public-modal-left">
+                  <div className="public-modal-image">
+                    <img src={selectedProduct.image_url} alt={selectedProduct.name} />
+                    <div className="public-modal-image-badge">
+                      <FaLeaf /> 100% Natural
+                    </div>
                   </div>
                 </div>
-                <div className="modal-details">
-                  <div className="modal-header">
-                    <span className="modal-category">{selectedProduct.category}</span>
+                <div className="public-modal-right">
+                  <div className="public-modal-header">
+                    <span className="public-modal-category">{selectedProduct.category}</span>
                     <h3>{selectedProduct.name}</h3>
-                    <div className="modal-rating">
-                      <div className="stars">
+                    <div className="public-modal-rating">
+                      <div className="public-stars">
                         {[...Array(5)].map((_, i) => (
                           <FaStar key={i} className={i < Math.floor(selectedProduct.rating) ? 'star-filled' : 'star-empty'} />
                         ))}
                       </div>
-                      <span>{selectedProduct.rating}/5</span>
+                      <span className="rating-num">{selectedProduct.rating}/5</span>
                     </div>
                   </div>
-                  <p className="modal-description">{selectedProduct.description}</p>
-                  <div className="modal-features">
-                    <div className="feature">
+                  <p className="public-modal-description">{selectedProduct.description}</p>
+                  <div className="public-modal-features">
+                    <div className="public-feature-item">
                       <FaTruck />
-                      <span>Delivered within 24 hours</span>
+                      <span>Delivery in 24h</span>
                     </div>
-                    <div className="feature">
+                    <div className="public-feature-item">
                       <FaLeaf />
-                      <span>No preservatives added</span>
+                      <span>Natural</span>
                     </div>
-                    <div className="feature">
+                    <div className="public-feature-item">
                       <FaHeart />
-                      <span>100% vegetarian</span>
+                      <span>Pure</span>
                     </div>
                   </div>
-                  <div className="modal-price">
-                    <div className="price-main">
-                      <span className="price">{selectedProduct.price}</span>
-                      <span className="discount">(No hidden charges)</span>
+                  <div className="public-modal-price-box">
+                    <div className="price-info">
+                      <span className="main-price">{selectedProduct.price}</span>
+                      <span className="price-tag">(No hidden charges)</span>
                     </div>
-                    <div className="quantity-selector">
-                      <label>Quantity:</label>
+                    <div className="public-quantity">
+                      <label>Qty:</label>
                       <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
                         <option value="1">1 unit</option>
                         <option value="2">2 units</option>
@@ -332,14 +365,14 @@ const Products = () => {
                       </select>
                     </div>
                   </div>
-                  <div className="modal-actions">
+                  <div className="public-modal-actions">
                     <button
-                      className="buy-now-btn"
+                      className="public-buy-btn"
                       onClick={() => navigate('/checkout', { state: { product: selectedProduct, quantity: parseInt(quantity) } })}
                     >
                       <FaShoppingCart /> Buy Now
                     </button>
-                    <button className="add-to-cart-btn">
+                    <button className="public-cart-btn">
                       Add to Cart
                     </button>
                   </div>

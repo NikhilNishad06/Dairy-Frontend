@@ -13,6 +13,7 @@ import {
 import AOS from "aos";
 import "aos/dist/aos.css";
 import PageTransition from "../components/PageTransition";
+import { supabase } from "../supabaseClient";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,8 @@ const Contact = () => {
     productInterest: "",
     message: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     AOS.init({
@@ -41,15 +44,37 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message sent successfully!");
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      productInterest: "",
-      message: "",
-    });
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.from("contacts").insert([
+        {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          product_interest: formData.productInterest,
+          message: formData.message,
+        },
+      ]);
+
+      if (error) throw error;
+
+      alert("Thank you! Your message has been sent successfully.");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        productInterest: "",
+        message: "",
+      });
+    } catch (err) {
+      console.error("Error submitting contact form:", err);
+      alert("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -209,9 +234,14 @@ const Contact = () => {
 
             {/* MIDDLE VERTICAL SECTION (Submit Button) */}
             <div className="grid-middle-section">
-              <button type="submit" className="submit-btn" onClick={handleSubmit}>
+              <button
+                type="submit" 
+                className={`submit-btn ${loading ? "loading" : ""}`} 
+                onClick={handleSubmit}
+                disabled={loading}
+              >
                 <FaPaperPlane className="btn-icon" />
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </div>
 
