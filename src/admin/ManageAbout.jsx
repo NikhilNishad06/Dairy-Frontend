@@ -20,7 +20,7 @@ const ManageAbout = () => {
   const fetchTeam = async () => {
     try {
       setLoading(true);
-      const API_URL = import.meta.env.VITE_API_URL || "";
+      const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
       const res = await axios.get(`${API_URL}/api/about`);
       
       // Handle different response structures gracefully
@@ -58,7 +58,7 @@ const ManageAbout = () => {
     if (image) formData.append("image", image);
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
+      const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
       if (editingId) {
         await axios.put(
           `${API_URL}/api/about/${editingId}`,
@@ -98,7 +98,7 @@ const ManageAbout = () => {
     if (!window.confirm("Are you sure you want to delete this team member?")) return;
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
+      const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
       await axios.delete(`${API_URL}/api/about/${id}`);
       alert("Team member deleted successfully");
       fetchTeam();

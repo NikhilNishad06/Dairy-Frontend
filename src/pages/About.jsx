@@ -24,7 +24,7 @@ const About = () => {
     const fetchTeam = async () => {
       try {
         setLoading(true);
-        const API_URL = import.meta.env.VITE_API_URL || "";
+        const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
         const res = await axios.get(`${API_URL}/api/about`);
         
         if (res.data && res.data.success && res.data.data.length > 0) {

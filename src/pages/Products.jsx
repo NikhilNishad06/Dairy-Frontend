@@ -41,7 +41,7 @@ const Products = () => {
       // 1. Fetch from External API (with timeout/retry logic internally handled by axios defaults or just simple catch)
       let apiProducts = [];
       try {
-        const API_URL = import.meta.env.VITE_API_URL || "";
+        const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
         const apiRes = await axios.get(`${API_URL}/api/products`);
         apiProducts = apiRes.data || [];
       } catch (apiError) {

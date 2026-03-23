@@ -35,7 +35,7 @@ const PaymentButton = ({ amount, userId, address, planName, onSuccess, onError, 
             }
 
             // 1. Creating order on backend
-            const API_URL = import.meta.env.VITE_API_URL || "";
+            const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
             const result = await axios.post(`${API_URL}/api/payments/create-order`, {
                 amount,
                 userId,
@@ -63,7 +63,7 @@ const PaymentButton = ({ amount, userId, address, planName, onSuccess, onError, 
                 handler: async function (response) {
                     try {
                         // 3. Verify Payment Signature
-                        const API_URL = import.meta.env.VITE_API_URL || "";
+                        const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
                         const verifyResult = await axios.post(`${API_URL}/api/payments/verify-payment`, {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,

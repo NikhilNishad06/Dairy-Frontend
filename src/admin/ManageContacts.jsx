@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaSave, FaTimes, FaUser, FaEnvelope, FaPhone, FaBox, FaComment, FaCalendar } from "react-icons/fa";
 import "./ManageContacts.css";
+import axios from "axios";
 
 const ManageContacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -10,15 +11,14 @@ const ManageContacts = () => {
   const [editData, setEditData] = useState({});
   const [search, setSearch] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
+
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
-      const res = await fetch(`${API_URL}/api/contact`);
-      if (!res.ok) throw new Error("Failed to fetch contacts");
-
-      const result = await res.json();
-      setContacts(Array.isArray(result) ? result : []);
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/api/contact`);
+      setContacts(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
       setError("Unable to load contacts");
@@ -49,14 +49,9 @@ const ManageContacts = () => {
     if (!window.confirm("Are you sure you want to delete this contact?"))
       return;
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
-      const res = await fetch(`${API_URL}/api/contact/${id}`, {
-        method: "DELETE",
-      });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.message || "Delete failed");
-
+      await axios.delete(`${API_URL}/api/contact/${id}`);
       setContacts(contacts.filter((c) => c.id !== id));
+      alert("Contact deleted successfully");
     } catch (err) {
       console.error(err);
       alert("Failed to delete contact");
@@ -82,25 +77,20 @@ const ManageContacts = () => {
 
   const handleEditSave = async (id) => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
-      const res = await fetch(`${API_URL}/api/contact/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: editData.first_name,
-          lastName: editData.last_name,
-          email: editData.email,
-          phone: editData.phone,
-          productInterest: editData.product_interest,
-          message: editData.message,
-        }),
+      const res = await axios.put(`${API_URL}/api/contact/${id}`, {
+        firstName: editData.first_name,
+        lastName: editData.last_name,
+        email: editData.email,
+        phone: editData.phone,
+        productInterest: editData.product_interest,
+        message: editData.message,
       });
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.message || "Update failed");
-
-      setContacts(contacts.map((c) => (c.id === id ? result.data[0] : c)));
+      // Handle response structure (it usually returns { data: [updated_item] })
+      const updatedContact = res.data.data ? res.data.data[0] : res.data;
+      setContacts(contacts.map((c) => (c.id === id ? updatedContact : c)));
       setEditingId(null);
+      alert("Contact updated successfully");
     } catch (err) {
       console.error(err);
       alert("Failed to update contact");

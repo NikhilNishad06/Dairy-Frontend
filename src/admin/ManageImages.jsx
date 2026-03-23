@@ -24,7 +24,7 @@ const ManageImages = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const API_URL = import.meta.env.VITE_API_URL || "";
+      const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
       const res = await axios.get(`${API_URL}/api/products`);
       setProducts(res.data);
     } catch (err) {
@@ -59,7 +59,7 @@ const ManageImages = () => {
     if (image) formData.append("image", image);
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
+      const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
       if (editingId) {
         await axios.put(
           `${API_URL}/api/products/${editingId}`,
@@ -100,7 +100,7 @@ const ManageImages = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "";
+      const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
       await axios.delete(`${API_URL}/api/products/${id}`);
       alert("Product deleted successfully");
       fetchProducts();
