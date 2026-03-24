@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { FaStar, FaShoppingCart, FaSearch, FaTimes, FaLeaf, FaHeart, FaSeedling, FaCalendarAlt, FaTruck } from "react-icons/fa";
 import { FaCow } from "react-icons/fa6"; // FaCow is in fa6 package
+import { GiMilkCarton } from "react-icons/gi";
 import { supabase } from "../supabaseClient";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +13,32 @@ const Products = () => {
   const [search, setSearch] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [wishlistIds, setWishlistIds] = useState(new Set());
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAllProducts();
 
-    // Set up Real-time subscription for Supabase products
-    // This ensures that anything the admin adds is immediately visible to customers
+    // Fetch user and wishlist session
+    const checkUser = async () => {
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      setUser(currentUser);
+      if (currentUser) {
+        const { data: wishlistData } = await supabase
+          .from('wishlist')
+          .select('product_id')
+          .eq('user_id', currentUser.id);
+        
+        if (wishlistData) {
+          const ids = new Set(wishlistData.map(item => item.product_id));
+          setWishlistIds(ids);
+        }
+      }
+    };
+    checkUser();
+
+    // Set up Real-time subscription... (previous logic)
     const channel = supabase
       .channel("products_realtime")
       .on(
@@ -175,36 +195,74 @@ const Products = () => {
     setQuantity(1);
   };
 
+  const toggleWishlist = async (e, productId) => {
+    e.stopPropagation(); // Don't trigger modal
+    if (!user) {
+      alert("Please login to use wishlist.");
+      navigate("/login");
+      return;
+    }
+
+    const isWishlisted = wishlistIds.has(productId);
+
+    if (isWishlisted) {
+      // Remove from wishlist
+      const { error } = await supabase
+        .from('wishlist')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('product_id', productId);
+      
+      if (!error) {
+        const newIds = new Set(wishlistIds);
+        newIds.delete(productId);
+        setWishlistIds(newIds);
+      }
+    } else {
+      // Add to wishlist
+      const { error } = await supabase
+        .from('wishlist')
+        .insert([{ user_id: user.id, product_id: productId }]);
+      
+      if (!error) {
+        const newIds = new Set(wishlistIds);
+        newIds.add(productId);
+        setWishlistIds(newIds);
+      }
+    }
+  };
+
   return (
     <PageTransition>
       <div className="products-page">
-        {/* Hero Section with Brand Theme */}
+        {/* Hero Section - Matching About Page UI */}
         <section className="products-hero">
-          <div className="brand-overlay">
-            <div className="brand-logo">
-              <span className="panchmev">PANCHMEV</span>
-              <span className="food-product">FOOD & PRODUCT</span>
-              <span className="tagline">MADE WITH TRADITIONAL INDIAN METHODS</span>
-            </div>
-            <div className="hero-content">
-              <h1>Pure Dairy Heritage</h1>
-              <p className="hero-subtitle">Experience the authentic taste of traditional Indian dairy, preserved through generations</p>
-              <div className="hero-features">
-                <div className="feature-item">
-                  <FaLeaf className="feature-icon" />
-                  <span>100% Natural</span>
+          <div className="hero-overlay-about"></div>
+          <div className="container">
+            <div className="hero-content-about">
+              <div className="center-badge">
+                <GiMilkCarton className="badge-icon" />
+                <span>Traditional Since 1995</span>
+              </div>
+              <h1 className="hero-main-title">
+                <span className="hero-top-text">Our Premium</span>
+                <span className="hero-brand-text">Panchmev Products</span>
+              </h1>
+              <p className="hero-subtitle-about">
+                Preserving Tradition, Delivering Purity — Handpicked Dairy Excellence for Your Family
+              </p>
+              <div className="hero-stats-about">
+                <div className="stat-item-about">
+                  <span className="stat-number-about">28+</span>
+                  <span className="stat-label-about">Years</span>
                 </div>
-                <div className="feature-item">
-                  <FaHeart className="feature-icon" />
-                  <span>Family Legacy</span>
+                <div className="stat-item-about">
+                  <span className="stat-number-about">5000+</span>
+                  <span className="stat-label-about">Families</span>
                 </div>
-                <div className="feature-item">
-                  <FaCow className="feature-icon" />
-                  <span>Grass-fed Cows</span>
-                </div>
-                <div className="feature-item">
-                  <FaTruck className="feature-icon" />
-                  <span>24h Delivery</span>
+                <div className="stat-item-about">
+                  <span className="stat-number-about">100%</span>
+                  <span className="stat-label-about">Natural</span>
                 </div>
               </div>
             </div>
@@ -262,6 +320,12 @@ const Products = () => {
                       <FaSeedling className="badge-icon" />
                       <span>{product.category}</span>
                     </div>
+                    <button 
+                      className={`wishlist-icon-btn ${wishlistIds.has(product.id) ? 'active' : ''}`}
+                      onClick={(e) => toggleWishlist(e, product.id)}
+                    >
+                      <FaHeart />
+                    </button>
                     <div className="product-overlay">
                       <button className="quick-view" onClick={() => openModal(product)}>
                         View Details

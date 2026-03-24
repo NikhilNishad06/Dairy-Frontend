@@ -95,7 +95,7 @@ const Navbar = () => {
                     className="nav-link fancy-link d-flex align-items-center justify-content-center"
                     to={role === 'admin' ? "/admin-dashboard" : "/dashboard"}
                   >
-                    <FaColumns className="me-2" />
+                    <FaUser className="me-2" />
                     Profile
                   </Link>
                 </li>

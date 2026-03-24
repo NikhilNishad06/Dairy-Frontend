@@ -34,7 +34,11 @@ const Signup = () => {
 
             if (signupError) {
                 console.error("Auth Error:", signupError);
-                setError(`Auth Error: ${signupError.message}`);
+                if (signupError.message.includes("already registered")) {
+                    setError("This email is already registered. Please Login instead.");
+                } else {
+                    setError(`Auth Error: ${signupError.message}`);
+                }
                 setLoading(false);
                 return;
             }
@@ -46,7 +50,7 @@ const Signup = () => {
                     full_name: fullName.trim(),
                     email: email.trim(),
                     password: password, // As requested, storing this directly
-                    role: 'user' 
+                    role: 'customer' // Match ProtectedRoute allowed roles (customer, farmer, admin, etc.)
                 }]);
 
                 if (dbError) {
