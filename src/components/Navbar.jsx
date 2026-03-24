@@ -96,7 +96,7 @@ const Navbar = () => {
                     to={role === 'admin' ? "/admin-dashboard" : "/dashboard"}
                   >
                     <FaColumns className="me-2" />
-                    Dashboard
+                    Profile
                   </Link>
                 </li>
                 <li className="nav-item mt-3 mt-lg-0">

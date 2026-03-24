@@ -1,0 +1,88 @@
+.qr-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.qr-modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+}
+
+.qr-image-container {
+    margin: 20px auto;
+    width: 250px;
+    height: 250px;
+    background: #f9f9f9;
+    border: 1px dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.payment-qr-img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.qr-amount-text {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.qr-instructions {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.qr-confirm-btn {
+    width: 100%;
+    padding: 12px;
+    background: #6a1b9a; /* PhonePe color */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.qr-confirm-btn:hover {
+    background: #4a148c;
+}
+
+.qr-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #888;
+}
+
+.qr-success-msg {
+    color: #2e7d32;
+    padding: 10px;
+    font-weight: 600;
+}

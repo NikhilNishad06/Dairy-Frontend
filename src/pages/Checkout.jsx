@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PaymentButton from "../components/PaymentButton";
+import QRPaymentModal from "../components/QRPaymentModal";
 import PageTransition from "../components/PageTransition";
+import axios from "axios";
 import "./Checkout.css";
 
 const Checkout = () => {
@@ -15,6 +17,10 @@ const Checkout = () => {
         city: "",
         zip: "",
     });
+
+    const [paymentMethod, setPaymentMethod] = useState("cod"); // "cod" or "qr"
+    const [showQRModal, setShowQRModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Re-direct if not coming from "Buy Now"
     useEffect(() => {
@@ -46,6 +52,48 @@ const Checkout = () => {
 
     const handlePaymentError = (err) => {
         console.error("Payment Error: ", err);
+    };
+
+    const handleQRPayClick = async () => {
+        if (!isAddressValid) return;
+
+        try {
+            setLoading(true);
+            const API_URL = import.meta.env.VITE_API_URL || "https://dairy-backend-g9m2.onrender.com";
+            const response = await axios.post(`${API_URL}/api/payments/create-order`, {
+                amount: totalAmount,
+                userId: null,
+                address: address,
+                receipt: `${paymentMethod}_receipt_${Date.now()}`
+            });
+
+            if (response.data.success) {
+                if (paymentMethod === 'qr') {
+                    setShowQRModal(true);
+                } else {
+                    // It's COD, just show success and redirect
+                    alert("Order placed successfully (Cash on Delivery)! We will contact you soon.");
+                    navigate("/products");
+                }
+            } else {
+                alert("Failed to initialize order. Please try again.");
+            }
+        } catch (error) {
+            console.error("Order creation error:", error);
+            alert("Something went wrong. Check your internet connection.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleQRConfirm = () => {
+        // Here we just notify the user, as the order is already in DB as 'pending'
+        // In a real app, you might send a notification to the admin.
+        setTimeout(() => {
+            setShowQRModal(false);
+            alert("Order placed successfully! We will verify your payment and contact you.");
+            navigate("/products");
+        }, 2000);
     };
 
     return (
@@ -132,19 +180,54 @@ const Checkout = () => {
                                     <span>₹{totalAmount}</span>
                                 </div>
 
+                                <div className="payment-method-selector">
+                                    <h4>Select Payment Method:</h4>
+                                    <div className="method-options">
+                                        <label className={`method-option ${paymentMethod === 'cod' ? 'active' : ''}`}>
+                                            <input 
+                                                type="radio" 
+                                                name="paymentMethod" 
+                                                value="cod" 
+                                                checked={paymentMethod === 'cod'} 
+                                                onChange={() => setPaymentMethod('cod')} 
+                                            />
+                                            <span>Cash on Delivery (COD)</span>
+                                        </label>
+                                        <label className={`method-option ${paymentMethod === 'qr' ? 'active' : ''}`}>
+                                            <input 
+                                                type="radio" 
+                                                name="paymentMethod" 
+                                                value="qr" 
+                                                checked={paymentMethod === 'qr'} 
+                                                onChange={() => setPaymentMethod('qr')} 
+                                            />
+                                            <span>Scan & Pay (UPI)</span>
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div className="payment-section">
-                                    <PaymentButton
-                                        amount={totalAmount}
-                                        userId={null} // Passing null since database expects a valid UUID for referenced user_id.
-                                        address={address}
-                                        planName={`Purchase of ${product.name}`}
-                                        onSuccess={handlePaymentSuccess}
-                                        onError={handlePaymentError}
-                                        disabled={!isAddressValid}
-                                    />
+                                    {paymentMethod === 'cod' ? (
+                                        <button 
+                                            className="cod-place-order-btn" 
+                                            onClick={handleQRPayClick} // Reusing logic to create order in DB
+                                            disabled={!isAddressValid || loading}
+                                        >
+                                            {loading ? "Processing..." : `Place Order (COD) - ₹${totalAmount}`}
+                                        </button>
+                                    ) : (
+                                        <button 
+                                            className="qr-pay-initiator-btn" 
+                                            onClick={handleQRPayClick}
+                                            disabled={!isAddressValid || loading}
+                                        >
+                                            {loading ? "Processing..." : `Pay via QR - ₹${totalAmount}`}
+                                        </button>
+                                    )}
+
                                     {!isAddressValid && (
                                         <div className="fill-address-warning">
-                                            Please fill out all delivery address fields above to click this button.
+                                            Please fill out all delivery address fields above to proceed.
                                         </div>
                                     )}
                                 </div>
@@ -152,6 +235,13 @@ const Checkout = () => {
                         </div>
                     </div>
                 </div>
+
+                <QRPaymentModal 
+                    isOpen={showQRModal}
+                    onClose={() => setShowQRModal(false)}
+                    amount={totalAmount}
+                    onConfirm={handleQRConfirm}
+                />
             </div>
         </PageTransition>
     );
